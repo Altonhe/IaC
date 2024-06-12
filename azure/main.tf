@@ -114,7 +114,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
 
   source_image_reference {
@@ -126,7 +126,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   custom_data = base64encode(templatefile("${path.module}/init.tpl", {
     user       = var.admin_username,
-    docker_compose = file("${path.module}/docker-compose.prod.yml"),
+    caddy     = var.caddy,
+    docker_compose = file("${path.module}/docker-compose.caddy.yml"),
     docker_env = file("${path.module}/.env")
   }))
 }
